@@ -25,12 +25,12 @@ class LoadingButton @JvmOverloads constructor(
   private var textSize: Float = resources.getDimension(R.dimen.textSize)
   private var circleXOffset = textSize / 2
 
-  private var buttonText: String
+  private var buttonText = R.attr.buttonText.toString()
 
   private var progressWidth = 0f
   private var progressCircle = 0f
 
-  private var buttonColor = ContextCompat.getColor(context, R.color.colorPrimary)
+  private var buttonColor = R.attr.buttonBackgroundColor
   private var loadingColor = ContextCompat.getColor(context, R.color.colorPrimaryDark)
   private var circleColor = ContextCompat.getColor(context, R.color.colorAccent)
 
@@ -70,7 +70,14 @@ class LoadingButton @JvmOverloads constructor(
   }
 
   init {
-    buttonText = resources.getString(R.string.button_name)
+    context.theme.obtainStyledAttributes(attrs, R.styleable.LoadingButton, 0, 0).apply {
+      try {
+        buttonText = resources.getString(R.string.button_name)
+        buttonColor = ContextCompat.getColor(context, R.color.colorPrimary)
+      } finally {
+        recycle()
+      }
+    }
   }
 
   override fun onDraw(canvas: Canvas) {
